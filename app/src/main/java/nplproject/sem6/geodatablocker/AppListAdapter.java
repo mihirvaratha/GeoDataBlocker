@@ -25,9 +25,12 @@ public class AppListAdapter extends ArrayAdapter<ApplicationInfo> {
     private Context context;
     private PackageManager packageManager;
     private ArrayList<Boolean> checkList = new ArrayList<Boolean>();
+    private ArrayList<String> selectedAppList = new ArrayList<String>();
+    public static int selectedAppListCounter = 0;
+    public static int[] temp = new int[1000];
+    public static int tempCounter=0;
 
-    public AppListAdapter(Context context, int textViewResourceId,
-                              List<ApplicationInfo> appsList) {
+    public AppListAdapter(Context context, int textViewResourceId, List<ApplicationInfo> appsList) {
         super(context, textViewResourceId, appsList);
         this.context = context;
         this.appsList = appsList;
@@ -86,7 +89,28 @@ public class AppListAdapter extends ArrayAdapter<ApplicationInfo> {
 
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             checkList.set((Integer)buttonView.getTag(),isChecked); // get the tag so we know the row and store the status
-            Toast.makeText(getContext(), "yaha pe se selected array me daal de", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "selected" + checkList, Toast.LENGTH_SHORT).show();
+//            selectedAppList.add();
+
+            ApplicationInfo data = appsList.get((Integer)buttonView.getTag());
+            if (isChecked){
+                selectedAppList.add(data.packageName);
+                temp[selectedAppListCounter] = (Integer)buttonView.getTag();
+                selectedAppListCounter++;
+            }
+            if (!isChecked){
+                int i;
+                for (i=0; i<tempCounter;i++)
+                    if (temp[i] == (Integer)buttonView.getTag())
+                        break;
+
+                selectedAppList.remove(i);
+                --selectedAppListCounter;
+
+            }
+
+            Toast.makeText(getContext(), "inside array " + selectedAppList, Toast.LENGTH_SHORT).show();
+
         }
     };
 }

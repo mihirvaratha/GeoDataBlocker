@@ -1,9 +1,13 @@
 package nplproject.sem6.geodatablocker;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -12,13 +16,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static android.R.attr.fragment;
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class AppsFragment extends android.support.v4.app.ListFragment {
@@ -26,6 +36,9 @@ public class AppsFragment extends android.support.v4.app.ListFragment {
     private PackageManager packageManager = null;
     private List<ApplicationInfo> applist = null;
     private AppListAdapter listadaptor = null;
+
+//    SharedPreferences shared_packageList = this.getActivity().getSharedPreferences("App_settings", MODE_PRIVATE);;
+
 
     public AppsFragment() {
         // Required empty public constructor
@@ -48,6 +61,32 @@ public class AppsFragment extends android.support.v4.app.ListFragment {
 
 
         // Inflate the layout for this fragment
+
+        //To force stop app(requires root permission)
+//        try {
+//            Process suProcess = Runtime.getRuntime().exec("su");
+//            DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
+//            os.writeBytes("adb shell" + "\n");
+//            os.flush();
+//            os.writeBytes("am force-stop com.bsb.hike" + "\n");
+//            os.flush();
+////            Toast.makeText(getActivity(), "grantedddd", Toast.LENGTH_LONG).show();
+//        } catch (IOException e) {
+//            Toast.makeText(getActivity(), "Root Permission Not Found"+e.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+        Button button_done = (Button) view.findViewById(R.id.btnBlockApp);
+//        button_done.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+
+//      link->          http://stackoverflow.com/questions/7057845/save-arraylist-to-sharedpreferences
+//                SharedPreferences.Editor editor = shared_packageList.edit();
+//                Set<String> set = new HashSet<String>();
+//                set.addAll(selectedAppList);
+//                editor.putStringSet("APP_LIST", set);
+//                editor.apply();
+//            }
+//        });
+
         return view;
     }
 
