@@ -30,6 +30,7 @@ import java.util.List;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static nplproject.sem6.geodatablocker.SelectLocation.HomePlaceName;
 import static nplproject.sem6.geodatablocker.SelectLocation.MyPREFERENCES;
 
 /**
@@ -77,11 +78,13 @@ public class HomeFragment extends Fragment {
         Button btnStart = (Button) view.findViewById(R.id.btnStart);
         Button btnStop = (Button) view.findViewById(R.id.btnStop);
         SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String hpn = sharedpreferences.getString("hpn","");
+        String wpn = sharedpreferences.getString("wpn","");
         String hplat = sharedpreferences.getString("hplat","");
         String hplon = sharedpreferences.getString("hplon","");
         String wplat = sharedpreferences.getString("wplat","");
         String wplon = sharedpreferences.getString("wplon","");
-        Toast.makeText(getActivity(),"hp:Latitude:"+hplat+"\nhp:Longitude:"+hplon,Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(),"hp:Latitude:"+hplat+"\nhp:Longitude:"+wplat,Toast.LENGTH_LONG).show();
         Toast.makeText(getActivity(),"wp:Latitude:"+wplat+"\nwp:Longitude:"+wplon,Toast.LENGTH_LONG).show();
 
 
@@ -126,17 +129,22 @@ public class HomeFragment extends Fragment {
 
     }
     private void addNotification() {
-        NotificationCompat.Builder builder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(getContext())
-                        .setSmallIcon(R.drawable.icon)
-                        .setOngoing(true)
-                        .setContentTitle("Geo-Data Blocker is Running");
-        Intent notificationIntent = new Intent(getContext(), MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-        // Add as notification
+        SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String hpn = sharedpreferences.getString("hpn","");
+        String wpn = sharedpreferences.getString("wpn","");
+        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getContext())
+                .setSmallIcon(R.drawable.icon)
+                .setOngoing(true);
+        NotificationCompat.InboxStyle inboxStyle =
+                new NotificationCompat.InboxStyle();
+        String[] events = {"Home Place:"+hpn,"Work Place:"+wpn};
+        inboxStyle.setBigContentTitle("Geo-Data Blocker is Running");
+        for (int i=0; i < events.length; i++) {
+
+            inboxStyle.addLine(events[i]);
+        }
+        mBuilder.setStyle(inboxStyle);
         NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
+        manager.notify(0, mBuilder.build());
     }
 }
