@@ -2,23 +2,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nplproject.sem6.geodatablocker.LocationFragment">
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="APPS"-->
-        <!--android:textSize="40dp"-->
-        <!--android:textStyle="bold"-->
-        <!--android:layout_centerInParent="true"/>-->
+    android:orientation="vertical"
+    tools:context="nplproject.sem6.geodatablocker.LocationFragment"
+    android:weightSum="1">
 
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="336dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="0.27"
+        android:dividerHeight="2.0sp" />
+
+    <Button
+        android:id="@+id/btnBlockApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text="DONE"
+        android:textColor="@color/textColorPrimary" />
 
 
 </LinearLayout>
