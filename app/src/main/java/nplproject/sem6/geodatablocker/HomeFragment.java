@@ -2,6 +2,8 @@ package nplproject.sem6.geodatablocker;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import java.util.List;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static nplproject.sem6.geodatablocker.SelectLocation.MyPREFERENCES;
 
 /**
@@ -57,8 +61,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        ActivityManager am = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        am.killBackgroundProcesses("com.kodarkooperativet.blackplayerex");
+
 
         GPSTracker gps = new GPSTracker(getActivity());
         String currentLatitude = String.valueOf(gps.getLatitude());
@@ -104,6 +107,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 else {
+                    addNotification();
                     Toast.makeText(getContext(),"Service Started",Toast.LENGTH_SHORT).show();
                 }
 
@@ -115,8 +119,24 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(),"Service Stopped",Toast.LENGTH_SHORT).show();
+                NotificationManager notifManager= (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                notifManager.cancelAll();
             }
         });
 
+    }
+    private void addNotification() {
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(getContext())
+                        .setSmallIcon(R.drawable.icon)
+                        .setOngoing(true)
+                        .setContentTitle("Geo-Data Blocker is Running");
+        Intent notificationIntent = new Intent(getContext(), MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+        // Add as notification
+        NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
     }
 }

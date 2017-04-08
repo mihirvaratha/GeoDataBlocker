@@ -1,6 +1,8 @@
 package nplproject.sem6.geodatablocker;
 
 import android.app.ActionBar;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.location,
             R.drawable.apps
     };
+    public void onDestroy(){
+        super.onDestroy();
+        NotificationManager notifManager= (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notifManager.cancelAll();
+    }
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
