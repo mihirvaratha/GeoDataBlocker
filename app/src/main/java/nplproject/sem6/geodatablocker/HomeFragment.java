@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -23,18 +24,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static nplproject.sem6.geodatablocker.AppListAdapter.selectedAppListCounter;
 import static nplproject.sem6.geodatablocker.SelectLocation.HomePlaceName;
 import static nplproject.sem6.geodatablocker.SelectLocation.MyPREFERENCES;
 
@@ -67,14 +63,21 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 2s
+                GPSTracker gps = new GPSTracker(getActivity());
+                String currentLatitude = String.valueOf(gps.getLatitude());
+                currentLatitude=currentLatitude.substring(0,currentLatitude.indexOf(".")+3);
+                String currentLongitude = String.valueOf(gps.getLongitude());
+                currentLongitude=currentLongitude.substring(0,currentLongitude.indexOf(".")+3);
+                Toast.makeText(getContext(),"Current Latitude:"+currentLatitude+"\nCurrent Longitude:"+currentLongitude,Toast.LENGTH_LONG).show();
+            }
+        }, 2000);
 
 
-        GPSTracker gps = new GPSTracker(getActivity());
-        String currentLatitude = String.valueOf(gps.getLatitude());
-        currentLatitude=currentLatitude.substring(0,currentLatitude.indexOf(".")+3);
-        String currentLongitude = String.valueOf(gps.getLongitude());
-        currentLongitude=currentLongitude.substring(0,currentLongitude.indexOf(".")+3);
-//        Toast.makeText(getContext(),"Current Latitude:"+currentLatitude+"\nCurrent Longitude:"+currentLongitude,Toast.LENGTH_LONG).show();
 
 
 //        longitude=longitude.substring(10,longitude.indexOf(".")+3);
@@ -89,8 +92,8 @@ public class HomeFragment extends Fragment {
         String hplon = sharedpreferences.getString("hplon","");
         String wplat = sharedpreferences.getString("wplat","");
         String wplon = sharedpreferences.getString("wplon","");
-//        Toast.makeText(getActivity(),"hp:Latitude:"+hplat+"\nhp:Longitude:"+wplat,Toast.LENGTH_LONG).show();
-//        Toast.makeText(getActivity(),"wp:Latitude:"+wplat+"\nwp:Longitude:"+wplon,Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(),"hp:Latitude:"+hplat+"\nhp:Longitude:"+wplat,Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(),"wp:Latitude:"+wplat+"\nwp:Longitude:"+wplon,Toast.LENGTH_LONG).show();
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -117,33 +120,6 @@ public class HomeFragment extends Fragment {
                 else {
                     addNotification();
                     Toast.makeText(getContext(),"Service Started",Toast.LENGTH_SHORT).show();
-                    if (selectedAppListCounter == 0){
-                        Toast.makeText(getContext(),"No Apps Selected",Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        SharedPreferences sharedpreferences_package = getActivity().getPreferences(Context.MODE_PRIVATE);;
-                        String json = sharedpreferences_package.getString("APP_PACKAGE", "");
-                        ArrayList<String> foo = (ArrayList<String>) new Gson().fromJson(json,
-                                new TypeToken<ArrayList<String>>() {
-                                }.getType());
-
-                        try {
-                            Process suProcess = Runtime.getRuntime().exec("su");
-                            DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
-                            os.writeBytes("adb shell" + "\n");
-                            os.flush();
-                            for (int i=0; i<selectedAppListCounter;i++){
-                                String temp = foo.get(i);
-                                os.writeBytes("am force-stop " +temp + "\n");
-                                os.flush();
-                                Toast.makeText(getActivity(), "Forced_stopped "+temp, Toast.LENGTH_SHORT).show();
-
-                            }
-                        } catch (IOException e) {
-                            Toast.makeText(getActivity(), "Root Permission Not Found"+e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-
-                    }
                 }
 
             }
