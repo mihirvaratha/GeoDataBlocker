@@ -63,19 +63,23 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 2s
-                GPSTracker gps = new GPSTracker(getActivity());
-                String currentLatitude = String.valueOf(gps.getLatitude());
-                currentLatitude=currentLatitude.substring(0,currentLatitude.indexOf(".")+3);
-                String currentLongitude = String.valueOf(gps.getLongitude());
-                currentLongitude=currentLongitude.substring(0,currentLongitude.indexOf(".")+3);
-                Toast.makeText(getContext(),"Current Latitude:"+currentLatitude+"\nCurrent Longitude:"+currentLongitude,Toast.LENGTH_LONG).show();
-            }
-        }, 2000);
+        GPSTracker gps = new GPSTracker(getActivity());
+        if (gps.canGetLocation()){
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //Do something after 2s
+                    GPSTracker gps = new GPSTracker(getActivity());
+                    String currentLatitude = String.valueOf(gps.getLatitude());
+                    currentLatitude=currentLatitude.substring(0,currentLatitude.indexOf(".")+3);
+                    String currentLongitude = String.valueOf(gps.getLongitude());
+                    currentLongitude=currentLongitude.substring(0,currentLongitude.indexOf(".")+3);
+                    Toast.makeText(getContext(),"Current Latitude:"+currentLatitude+"\nCurrent Longitude:"+currentLongitude,Toast.LENGTH_LONG).show();
+                }
+            }, 2000);
+        }
+
 
 
 
@@ -137,22 +141,38 @@ public class HomeFragment extends Fragment {
 
     }
     private void addNotification() {
-        SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        String hpn = sharedpreferences.getString("hpn","");
-        String wpn = sharedpreferences.getString("wpn","");
-        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.icon)
-                .setOngoing(true);
-        NotificationCompat.InboxStyle inboxStyle =
-                new NotificationCompat.InboxStyle();
-        String[] events = {"Home Place:"+hpn,"Work Place:"+wpn};
-        inboxStyle.setBigContentTitle("Geo-Data Blocker is Running");
-        for (int i=0; i < events.length; i++) {
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(getContext())
+                        .setSmallIcon(R.drawable.icon)
+                        .setOngoing(true)
+                        .setContentTitle("Geo-Data Blocker is Running");
+//                        .setContentText("This is a test notification");
 
-            inboxStyle.addLine(events[i]);
-        }
-        mBuilder.setStyle(inboxStyle);
+        Intent notificationIntent = new Intent(getContext(), MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+        // Add as notification
         NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, mBuilder.build());
+        manager.notify(0, builder.build());
     }
+//        SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+//        String hpn = sharedpreferences.getString("hpn","");
+//        String wpn = sharedpreferences.getString("wpn","");
+//        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(getContext())
+//                .setSmallIcon(R.drawable.icon)
+//                .setOngoing(true);
+//        NotificationCompat.InboxStyle inboxStyle =
+//                new NotificationCompat.InboxStyle();
+//        String[] events = {"Home Place:"+hpn,"Work Place:"+wpn};
+//        inboxStyle.setBigContentTitle("Geo-Data Blocker is Running");
+//        for (int i=0; i < events.length; i++) {
+//
+//            inboxStyle.addLine(events[i]);
+//        }
+//        mBuilder.setStyle(inboxStyle);
+//        NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+//        manager.notify(0, mBuilder.build());
+//    }
 }
