@@ -10,12 +10,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
@@ -45,7 +47,6 @@ import static nplproject.sem6.geodatablocker.SelectLocation.MyPREFERENCES;
 
 public class HomeFragment extends Fragment {
     public View view;
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -65,12 +66,13 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
         GPSTracker gps = new GPSTracker(getActivity());
         if (gps.canGetLocation()){
-            final Handler handler = new Handler();
+            final Handler handler = new Handler(); //haddler to delay coz gps takes some time
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -85,15 +87,14 @@ public class HomeFragment extends Fragment {
             }, 2000);
         }
 
-
-
-
-
 //        longitude=longitude.substring(10,longitude.indexOf(".")+3);
 
 //        Toast.makeText(getContext(),"Latitude:"+gps.getLatitude(),Toast.LENGTH_LONG).show();
         Button btnStart = (Button) view.findViewById(R.id.btnStart);
         Button btnStop = (Button) view.findViewById(R.id.btnStop);
+//        btnStop.setBackgroundColor(Color.RED);
+        btnStop.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.disable));
+
         SharedPreferences sharedpreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String hpn = sharedpreferences.getString("hpn","");
         String wpn = sharedpreferences.getString("wpn","");
