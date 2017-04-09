@@ -24,13 +24,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static nplproject.sem6.geodatablocker.AppListAdapter.selectedAppListCounter;
 import static nplproject.sem6.geodatablocker.SelectLocation.HomePlaceName;
 import static nplproject.sem6.geodatablocker.SelectLocation.MyPREFERENCES;
 
