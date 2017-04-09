@@ -27,6 +27,7 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -141,6 +142,7 @@ public class AppsFragment extends android.support.v4.app.ListFragment {
         @Override
         protected Void doInBackground(Void... params) {
             applist = checkForLaunchIntent(packageManager.getInstalledApplications(PackageManager.GET_META_DATA));
+            Collections.sort(applist, new ApplicationInfo.DisplayNameComparator(packageManager));
             listadaptor = new AppListAdapter(getActivity(),
                     R.layout.app_row, applist);
 
