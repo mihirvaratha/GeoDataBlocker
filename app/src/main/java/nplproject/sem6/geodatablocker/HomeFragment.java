@@ -92,8 +92,8 @@ public class HomeFragment extends Fragment {
         String hplon = sharedpreferences.getString("hplon","");
         String wplat = sharedpreferences.getString("wplat","");
         String wplon = sharedpreferences.getString("wplon","");
-        Toast.makeText(getActivity(),"hp:Latitude:"+hplat+"\nhp:Longitude:"+wplat,Toast.LENGTH_LONG).show();
-        Toast.makeText(getActivity(),"wp:Latitude:"+wplat+"\nwp:Longitude:"+wplon,Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(),"hp:Latitude:"+hplat+"\nhp:Longitude:"+wplat,Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(),"wp:Latitude:"+wplat+"\nwp:Longitude:"+wplon,Toast.LENGTH_LONG).show();
 
 
         btnStart.setOnClickListener(new View.OnClickListener() {
