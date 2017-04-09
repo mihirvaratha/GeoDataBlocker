@@ -129,6 +129,33 @@ public class HomeFragment extends Fragment {
                 else {
                     addNotification();
                     Toast.makeText(getContext(),"Service Started",Toast.LENGTH_SHORT).show();
+                    if (selectedAppListCounter == 0){
+                        Toast.makeText(getContext(),"No Apps Selected",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        SharedPreferences sharedpreferences_package = getActivity().getPreferences(Context.MODE_PRIVATE);;
+                        String json = sharedpreferences_package.getString("APP_PACKAGE", "");
+                        ArrayList<String> foo = (ArrayList<String>) new Gson().fromJson(json,
+                                new TypeToken<ArrayList<String>>() {
+                                }.getType());
+
+                        try {
+                            Process suProcess = Runtime.getRuntime().exec("su");
+                            DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
+                            os.writeBytes("adb shell" + "\n");
+                            os.flush();
+                            for (int i=0; i<selectedAppListCounter;i++){
+                                String temp = foo.get(i);
+                                os.writeBytes("am force-stop " +temp + "\n");
+                                os.flush();
+                                Toast.makeText(getActivity(), "Forced_stopped "+temp, Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (IOException e) {
+                            Toast.makeText(getActivity(), "Root Permission Not Found"+e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                    }
                 }
 
             }
