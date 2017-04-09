@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,6 +33,8 @@ import java.util.Set;
 
 import static android.R.attr.fragment;
 import static android.content.Context.MODE_PRIVATE;
+import static android.os.ParcelFileDescriptor.MODE_WORLD_READABLE;
+import static nplproject.sem6.geodatablocker.AppListAdapter.selectedAppList;
 
 
 public class AppsFragment extends android.support.v4.app.ListFragment {
@@ -37,12 +43,11 @@ public class AppsFragment extends android.support.v4.app.ListFragment {
     private List<ApplicationInfo> applist = null;
     private AppListAdapter listadaptor = null;
 
-//    SharedPreferences shared_packageList = this.getActivity().getSharedPreferences("App_settings", MODE_PRIVATE);;
-
 
     public AppsFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,20 +80,24 @@ public class AppsFragment extends android.support.v4.app.ListFragment {
 //            Toast.makeText(getActivity(), "Root Permission Not Found"+e.getMessage(), Toast.LENGTH_LONG).show();
 //        }
         Button button_done = (Button) view.findViewById(R.id.btnBlockApp);
-//        button_done.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-
-//      link->          http://stackoverflow.com/questions/7057845/save-arraylist-to-sharedpreferences
-//                SharedPreferences.Editor editor = shared_packageList.edit();
-//                Set<String> set = new HashSet<String>();
-//                set.addAll(selectedAppList);
-//                editor.putStringSet("APP_LIST", set);
-//                editor.apply();
-//            }
-//        });
+        button_done.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "stored inside array " + selectedAppList, Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedpreferences_package = getActivity().getPreferences(Context.MODE_PRIVATE);;
+                String json = new Gson().toJson(selectedAppList);
+                SharedPreferences.Editor editor = sharedpreferences_package.edit();
+                editor.putString("APP_PACKAGE", json);
+                editor.commit();
+                Toast.makeText(getContext(), "Commited Data to shared pref", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
+
+
+
+
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -167,5 +176,6 @@ public class AppsFragment extends android.support.v4.app.ListFragment {
     @Override
     public void onStart(){
         super.onStart();
+
     }
 }

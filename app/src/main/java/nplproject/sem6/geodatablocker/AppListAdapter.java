@@ -25,7 +25,7 @@ public class AppListAdapter extends ArrayAdapter<ApplicationInfo> {
     private Context context;
     private PackageManager packageManager;
     private ArrayList<Boolean> checkList = new ArrayList<Boolean>();
-    private ArrayList<String> selectedAppList = new ArrayList<String>();
+    public static ArrayList<String> selectedAppList = new ArrayList<String>();
     public static int selectedAppListCounter = 0;
     public static int[] temp = new int[1000];
     public static int tempCounter=0;
@@ -82,6 +82,8 @@ public class AppListAdapter extends ArrayAdapter<ApplicationInfo> {
             packageName.setText(data.packageName);
             iconview.setImageDrawable(data.loadIcon(packageManager));
         }
+
+
         return view;
     }
 
