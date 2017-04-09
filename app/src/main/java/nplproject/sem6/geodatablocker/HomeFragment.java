@@ -156,6 +156,23 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(),"Service Stopped",Toast.LENGTH_SHORT).show();
                 NotificationManager notifManager= (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
                 notifManager.cancelAll();
+
+                SharedPreferences sharedpreferences_package = getActivity().getPreferences(Context.MODE_PRIVATE);;
+                String json = sharedpreferences_package.getString("APP_PACKAGE", "");
+                ArrayList<String> foo = (ArrayList<String>) new Gson().fromJson(json,
+                        new TypeToken<ArrayList<String>>() {
+                        }.getType());
+                for (int i=0; i<selectedAppListCounter;i++){
+                    String temp = foo.get(i);
+                    Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(temp);
+                    startActivity(LaunchIntent);
+                    Toast.makeText(getActivity(), "Started in background"+temp, Toast.LENGTH_SHORT).show();
+                }
+//                Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.bsb.hike");
+//                startActivity(LaunchIntent);
+                Intent thisapp = getActivity().getPackageManager().getLaunchIntentForPackage("nplproject.sem6.geodatablocker");
+                startActivity(thisapp);
+
             }
         });
 
