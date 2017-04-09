@@ -70,29 +70,36 @@ public class AppListAdapter extends ArrayAdapter<ApplicationInfo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        final ViewHolder viewHolder;
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewHolder viewHolder;
+        viewHolder = new ViewHolder();
 
-        if(view == null){
+        if (null == view){
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.app_row, null);
-            viewHolder = new ViewHolder();
+
             viewHolder.appicon = (ImageView) view.findViewById(R.id.app_icon);
             viewHolder.app_name = (TextView) view.findViewById(R.id.app_name);
             viewHolder.app_paackage = (TextView) view.findViewById(R.id.app_paackage);
-
-            ApplicationInfo data = appsList.get(position);
-            viewHolder.appicon.setImageDrawable(data.loadIcon(packageManager));
-            viewHolder.app_name.setText(data.loadLabel(packageManager));
-            viewHolder.app_paackage.setText(data.packageName);
-
-
             viewHolder.checkBox = (CheckBox) view.findViewById(R.id.cb_app);
+
             view.setTag(viewHolder);
 
         }
         else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        ApplicationInfo data = appsList.get(position);
+
+//            view = layoutInflater.inflate(R.layout.app_row, null);
+//            viewHolder.appicon = (ImageView) view.findViewById(R.id.app_icon);
+//            viewHolder.app_name = (TextView) view.findViewById(R.id.app_name);
+//            viewHolder.app_paackage = (TextView) view.findViewById(R.id.app_paackage);
+
+//            ApplicationInfo data = appsList.get(position);
+        viewHolder.appicon.setImageDrawable(data.loadIcon(packageManager));
+        viewHolder.app_name.setText(data.loadLabel(packageManager));
+        viewHolder.app_paackage.setText(data.packageName);
+
         viewHolder.checkBox.setId(position);
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
