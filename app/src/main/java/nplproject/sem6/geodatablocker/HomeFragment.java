@@ -75,11 +75,11 @@ public class HomeFragment extends Fragment {
                 public void run() {
                     //Do something after 2s
                     GPSTracker gps = new GPSTracker(getActivity());
-                    String currentLatitude = String.valueOf(gps.getLatitude());
-                    currentLatitude=currentLatitude.substring(0,currentLatitude.indexOf(".")+3);
-                    String currentLongitude = String.valueOf(gps.getLongitude());
-                    currentLongitude=currentLongitude.substring(0,currentLongitude.indexOf(".")+3);
-                    Toast.makeText(getContext(),"Current Latitude:"+currentLatitude+"\nCurrent Longitude:"+currentLongitude,Toast.LENGTH_LONG).show();
+//                    String currentLatitude = String.valueOf(gps.getLatitude());
+//                    currentLatitude=currentLatitude.substring(0,currentLatitude.indexOf(".")+3);
+//                    String currentLongitude = String.valueOf(gps.getLongitude());
+//                    currentLongitude=currentLongitude.substring(0,currentLongitude.indexOf(".")+3);
+                    Toast.makeText(getContext(),"Current Latitude:"+gps.latitude+"\nCurrent Longitude:"+gps.longitude,Toast.LENGTH_LONG).show();
                 }
             }, 2000);
         }
@@ -147,7 +147,7 @@ public class HomeFragment extends Fragment {
                                 String temp = foo.get(i);
                                 os.writeBytes("am force-stop " +temp + "\n");
                                 os.flush();
-                                Toast.makeText(getActivity(), "Forced_stopped "+temp, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Data Access Denied For "+temp, Toast.LENGTH_SHORT).show();
 
                             }
                         } catch (IOException e) {
@@ -177,7 +177,7 @@ public class HomeFragment extends Fragment {
                     String temp = foo.get(i);
                     Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(temp);
                     startActivity(LaunchIntent);
-                    Toast.makeText(getActivity(), "Started in background"+temp, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Data Access Granted For "+temp, Toast.LENGTH_SHORT).show();
                 }
 //                Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.bsb.hike");
 //                startActivity(LaunchIntent);
