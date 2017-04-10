@@ -173,16 +173,36 @@ public class HomeFragment extends Fragment {
                 ArrayList<String> foo = (ArrayList<String>) new Gson().fromJson(json,
                         new TypeToken<ArrayList<String>>() {
                         }.getType());
-                for (int i=0; i<selectedAppListCounter;i++){
-                    String temp = foo.get(i);
-                    Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(temp);
-                    startActivity(LaunchIntent);
-                    Toast.makeText(getActivity(), "Data Access Granted For "+temp, Toast.LENGTH_SHORT).show();
+//                for (int i=0; i<selectedAppListCounter;i++){
+//                    String temp = foo.get(i);
+//                    Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(temp);
+//                    startActivity(LaunchIntent);
+//                    Toast.makeText(getActivity(), "Data Access Granted For "+temp, Toast.LENGTH_SHORT).show();
+//                }
+                Process suProcess = null;
+                try {
+                    suProcess = Runtime.getRuntime().exec("su");
+                    DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
+                    os.writeBytes("adb shell" + "\n");
+                    os.flush();
+                    for (int i=0; i<1;i++){
+                        String temp = foo.get(i);
+                        os.writeBytes("am start -n " +temp + "/.Conversation"+ "\n");
+                        os.flush();
+//                        Toast.makeText(getActivity(), "Data Access Denied For "+temp, Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-//                Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.bsb.hike");
-//                startActivity(LaunchIntent);
+
                 Intent thisapp = getActivity().getPackageManager().getLaunchIntentForPackage("nplproject.sem6.geodatablocker");
                 startActivity(thisapp);
+//                Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.bsb.hike");
+//                startActivity(LaunchIntent);
+
 
             }
         });
