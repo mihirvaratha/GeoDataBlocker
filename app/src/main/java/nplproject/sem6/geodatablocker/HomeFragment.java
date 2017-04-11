@@ -1,20 +1,14 @@
 package nplproject.sem6.geodatablocker;
 
-import android.Manifest;
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
@@ -23,20 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
-import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
-import static android.content.Context.NOTIFICATION_SERVICE;
 import static nplproject.sem6.geodatablocker.AppListAdapter.selectedAppListCounter;
-import static nplproject.sem6.geodatablocker.SelectLocation.HomePlaceName;
 import static nplproject.sem6.geodatablocker.SelectLocation.MyPREFERENCES;
 
 /**
@@ -179,7 +166,7 @@ public class HomeFragment extends Fragment {
 //                    startActivity(LaunchIntent);
 //                    Toast.makeText(getActivity(), "Data Access Granted For "+temp, Toast.LENGTH_SHORT).show();
 //                }
-                Process suProcess = null;
+                Process suProcess;
                 try {
                     suProcess = Runtime.getRuntime().exec("su");
                     DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
@@ -189,21 +176,15 @@ public class HomeFragment extends Fragment {
                         String temp = foo.get(i);
                         os.writeBytes("am start -n " +temp + "/.Conversation"+ "\n");
                         os.flush();
-//                        Toast.makeText(getActivity(), "Data Access Denied For "+temp, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Data Access Allowed For "+temp, Toast.LENGTH_SHORT).show();
 
                     }
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 Intent thisapp = getActivity().getPackageManager().getLaunchIntentForPackage("nplproject.sem6.geodatablocker");
                 startActivity(thisapp);
-//                Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.bsb.hike");
-//                startActivity(LaunchIntent);
-
-
             }
         });
 
